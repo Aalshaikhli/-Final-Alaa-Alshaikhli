@@ -1,24 +1,37 @@
-# -Final-Alaa-Alshaikhli
 
-
-
-     # this list is used to store the different representations of the word
-
- @@ -30,8 +18,6 @@ def remove_word(data, word):
-
-     return data, representations
-
-     # Replace all delimiters with space
-
-     for char in DELIMITERS:
- @@ -56,8 +42,6 @@ def word_stats(data: str):
-
-         print("{0}:{1}%, {2} total occurrences, {3} representations {4}".format(word,(word_count/total_words)*100,word_count, len(representations), str(representations)))
-
-     file_name = input()
-
-     data = None
- @@ -77,4 +61,3 @@ if __name__ == "__main__":
-
-         }
-     }
+    
+    //static ServerSocket variable
+    private static ServerSocket server;
+    //socket server port on which it will listen
+    private static int port = 9876;
+    
+    public static void main(String args[]) throws IOException, ClassNotFoundException{
+        //create the socket server object
+        server = new ServerSocket(port);
+        //keep listens indefinitely until receives 'exit' call or program terminates
+        while(true){
+            System.out.println("Waiting for the client request");
+            //creating socket and waiting for client connection
+            Socket socket = server.accept();
+            //read from socket to ObjectInputStream object
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            //convert ObjectInputStream object to String
+            String message = (String) ois.readObject();
+            System.out.println("Message Received: " + message);
+            //create ObjectOutputStream object
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            //write object to Socket
+            oos.writeObject("Hi Client "+message);
+            //close resources
+            ois.close();
+            oos.close();
+            socket.close();
+            //terminate the server if client sends exit request
+            if(message.equalsIgnoreCase("exit")) break;
+        }
+        System.out.println("Shutting down Socket server!!");
+        //close the ServerSocket object
+        server.close();
+    }
+    
+}
